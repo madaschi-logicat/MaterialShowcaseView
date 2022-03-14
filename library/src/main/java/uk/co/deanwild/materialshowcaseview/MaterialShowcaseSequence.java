@@ -15,6 +15,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     Activity mActivity;
     private ShowcaseConfig mConfig;
     private int mSequencePosition = 0;
+    private Runnable mSequenceFinishListener = null;
 
     private OnSequenceItemShownListener mOnItemShownListener = null;
     private OnSequenceItemDismissedListener mOnItemDismissedListener = null;
@@ -76,6 +77,10 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         this.mOnItemDismissedListener = listener;
     }
 
+    public void setOnSequenceFinishListener(Runnable sequenceFinishListener) {
+        this.mSequenceFinishListener = sequenceFinishListener;
+    }
+
     public boolean hasFired() {
 
         if (mPrefsManager.getSequenceStatus() == PrefsManager.SEQUENCE_FINISHED) {
@@ -92,6 +97,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
          */
         if (mSingleUse) {
             if (hasFired()) {
+                fireFinishCallback();
                 return;
             }
 
@@ -129,6 +135,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
              */
             if (mSingleUse) {
                 mPrefsManager.setFired();
+                fireFinishCallback();
             }
         }
     }
@@ -150,10 +157,14 @@ public class MaterialShowcaseSequence implements IDetachedListener {
              */
             if (mSingleUse) {
                 mPrefsManager.setFired();
+                fireFinishCallback();
             }
         }
     }
 
+    private void fireFinishCallback() {
+        if (mSequenceFinishListener != null) mSequenceFinishListener.run();
+    }
 
     @Override
     public void onShowcaseDetached(MaterialShowcaseView showcaseView, boolean wasDismissed, boolean wasSkipped) {
