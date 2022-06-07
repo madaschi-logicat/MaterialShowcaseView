@@ -2,6 +2,7 @@ package uk.co.deanwild.materialshowcaseview;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,6 +14,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     Queue<MaterialShowcaseView> mShowcaseQueue;
     private boolean mSingleUse = false;
     Activity mActivity;
+    ViewGroup mSupport;
     private ShowcaseConfig mConfig;
     private int mSequencePosition = 0;
     private Runnable mSequenceFinishListener = null;
@@ -30,6 +32,18 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         this.singleUse(sequenceID);
     }
 
+    public ViewGroup getSupport() {
+        if (mSupport == null) {
+            if (mActivity == null) return null;
+            return (ViewGroup) mActivity.getWindow().getDecorView();
+        }
+        return mSupport;
+    }
+
+    public void setSupport(ViewGroup support) {
+        this.mSupport = support;
+    }
+
     public MaterialShowcaseSequence addSequenceItem(View targetView, String content, String dismissText) {
         addSequenceItem(targetView, "", content, dismissText);
         return this;
@@ -42,6 +56,30 @@ public class MaterialShowcaseSequence implements IDetachedListener {
                 .setTitleText(title)
                 .setDismissText(dismissText)
                 .setContentText(content)
+                .setSequence(true)
+                .build();
+
+        if (mConfig != null) {
+            sequenceItem.setConfig(mConfig);
+        }
+
+        mShowcaseQueue.add(sequenceItem);
+        return this;
+    }
+
+    public MaterialShowcaseSequence addSequenceItemRectangle(View targetView, String content, String dismissText) {
+        addSequenceItemRectangle(targetView, "", content, dismissText);
+        return this;
+    }
+
+    public MaterialShowcaseSequence addSequenceItemRectangle(View targetView, String title, String content, String dismissText) {
+
+        MaterialShowcaseView sequenceItem = new MaterialShowcaseView.Builder(mActivity)
+                .setTarget(targetView)
+                .setTitleText(title)
+                .setDismissText(dismissText)
+                .setContentText(content)
+                .withRectangleShape()
                 .setSequence(true)
                 .build();
 
@@ -125,7 +163,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         if (mShowcaseQueue.size() > 0 && !mActivity.isFinishing()) {
             MaterialShowcaseView sequenceItem = mShowcaseQueue.remove();
             sequenceItem.setDetachedListener(this);
-            sequenceItem.show(mActivity);
+            sequenceItem.show(getSupport());
             if (mOnItemShownListener != null) {
                 mOnItemShownListener.onShow(sequenceItem, mSequencePosition);
             }
@@ -147,7 +185,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         if (mShowcaseQueue.size() > 0 && !mActivity.isFinishing()) {
             MaterialShowcaseView sequenceItem = mShowcaseQueue.remove();
             sequenceItem.setDetachedListener(this);
-            sequenceItem.show(mActivity);
+            sequenceItem.show(getSupport());
             if (mOnItemShownListener != null) {
                 mOnItemShownListener.onShow(sequenceItem, mSequencePosition);
             }

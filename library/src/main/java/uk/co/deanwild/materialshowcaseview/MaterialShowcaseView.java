@@ -2,6 +2,8 @@ package uk.co.deanwild.materialshowcaseview;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -954,10 +956,10 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     /**
      * Reveal the showcaseview. Returns a boolean telling us whether we actually did show anything
      *
-     * @param activity
+     * @param viewGroup
      * @return
      */
-    public boolean show(final Activity activity) {
+    public boolean show(final ViewGroup viewGroup) {
 
         /**
          * if we're in single use mode and have already shot our bolt then do nothing
@@ -970,7 +972,7 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
             }
         }
 
-        ((ViewGroup) activity.getWindow().getDecorView()).addView(this);
+        viewGroup.addView(this);
 
         setShouldRender(true);
 
@@ -1011,6 +1013,21 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         updateDismissButton();
 
         return true;
+    }
+
+
+    public boolean show(final Activity activity) {
+        return show((ViewGroup) activity.getWindow().getDecorView());
+    }
+
+
+    public boolean show(final Dialog dialog) {
+        return show((ViewGroup) dialog.getWindow().getDecorView());
+    }
+
+
+    public boolean show(final DialogFragment dialogFragment) {
+        return show((ViewGroup) dialogFragment.getDialog().getWindow().getDecorView());
     }
 
 
