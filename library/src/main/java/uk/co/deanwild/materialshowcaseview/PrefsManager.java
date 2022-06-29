@@ -29,7 +29,7 @@ public class PrefsManager {
         return (status == SEQUENCE_FINISHED);
     }
 
-    void setFired() {
+    public void setFired() {
         setSequenceStatus(SEQUENCE_FINISHED);
     }
 

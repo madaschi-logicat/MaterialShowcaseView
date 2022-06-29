@@ -128,6 +128,10 @@ public class MaterialShowcaseSequence implements IDetachedListener {
         return false;
     }
 
+    public void setFired() {
+        mPrefsManager.setFired();
+    }
+
     public void start() {
 
         /**
