@@ -15,6 +15,7 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     private boolean mSingleUse = false;
     Activity mActivity;
     ViewGroup mSupport;
+    SupportProviderInterface mSupportProvider;
     private ShowcaseConfig mConfig;
     private int mSequencePosition = 0;
     private Runnable mSequenceFinishListener = null;
@@ -33,7 +34,10 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     }
 
     public ViewGroup getSupport() {
-        if (mSupport == null) {
+        if (mSupportProvider != null) {
+            return mSupportProvider.getSupport();
+        }
+        else if (mSupport == null) {
             if (mActivity == null) return null;
             return (ViewGroup) mActivity.getWindow().getDecorView();
         }
@@ -42,6 +46,10 @@ public class MaterialShowcaseSequence implements IDetachedListener {
 
     public void setSupport(ViewGroup support) {
         this.mSupport = support;
+    }
+
+    public void setSupport(SupportProviderInterface provider) {
+        this.mSupportProvider = provider;
     }
 
     public MaterialShowcaseSequence addSequenceItem(View targetView, String content, String dismissText) {
@@ -260,6 +268,10 @@ public class MaterialShowcaseSequence implements IDetachedListener {
 
     public interface OnSequenceItemDismissedListener {
         void onDismiss(MaterialShowcaseView itemView, int position);
+    }
+
+    public interface SupportProviderInterface {
+        ViewGroup getSupport();
     }
 
 }

@@ -25,7 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -311,14 +314,27 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
              */
             if (!mRenderOverNav && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-
                 mBottomMargin = getSoftButtonsBarSizePort();
 
+                ViewGroup.LayoutParams layoutParams = getLayoutParams();
 
-                FrameLayout.LayoutParams contentLP = (LayoutParams) getLayoutParams();
+                if (layoutParams instanceof FrameLayout.LayoutParams) {
+                    FrameLayout.LayoutParams contentLP = (FrameLayout.LayoutParams) layoutParams;
 
-                if (contentLP != null && contentLP.bottomMargin != mBottomMargin)
-                    contentLP.bottomMargin = mBottomMargin;
+                    if (contentLP.bottomMargin != mBottomMargin)
+                        contentLP.bottomMargin = mBottomMargin;
+                } else if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                    ConstraintLayout.LayoutParams contentLP = (ConstraintLayout.LayoutParams) layoutParams;
+
+                    if (contentLP.bottomMargin != mBottomMargin)
+                        contentLP.bottomMargin = mBottomMargin;
+                } else if (layoutParams instanceof LinearLayout.LayoutParams) {
+                    LinearLayout.LayoutParams contentLP = (LinearLayout.LayoutParams) layoutParams;
+
+                    if (contentLP.bottomMargin != mBottomMargin)
+                        contentLP.bottomMargin = mBottomMargin;
+                }
+
             }
 
             // apply the target position
