@@ -33,6 +33,10 @@ public class PrefsManager {
         setSequenceStatus(SEQUENCE_FINISHED);
     }
 
+    public void setNoFired() {
+        setSequenceStatus(SEQUENCE_NEVER_STARTED);
+    }
+
     /***
      * METHODS FOR SHOWCASE SEQUENCES
      */
