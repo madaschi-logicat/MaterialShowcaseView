@@ -39,6 +39,7 @@ public class ShowcaseTooltip {
     private View view;
     private TooltipView tooltip_view;
 
+    private Point tooltipOffset;
 
     private ShowcaseTooltip(Context context){
         MyContext myContext = new MyContext(getActivityContext(context));
@@ -62,6 +63,10 @@ public class ShowcaseTooltip {
             context = ((ContextWrapper) context).getBaseContext();
         }
         return null;
+    }
+
+    public void setTooltipOffset(Point tooltipOffset) {
+        this.tooltipOffset = tooltipOffset;
     }
 
     public ShowcaseTooltip position(Position position) {
@@ -136,6 +141,9 @@ public class ShowcaseTooltip {
 
                     // fixes top mode
                     rect.bottom += margin;
+
+                    rect.left += tooltipOffset.x;
+                    rect.top += tooltipOffset.y;
 
                     decorView.addView(tooltip_view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

@@ -98,6 +98,8 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     private ShowcaseTooltip toolTip;
     private boolean toolTipShown;
 
+    private Point shapeOffset = new Point();
+
     public MaterialShowcaseView(Context context) {
         super(context);
         init(context);
@@ -372,6 +374,10 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
         applyLayoutParams();
     }
 
+    public void setShapeOffset(Point shapeOffset) {
+        this.shapeOffset = shapeOffset;
+    }
+
     private void applyLayoutParams() {
 
         if (mContentBox != null && mContentBox.getLayoutParams() != null) {
@@ -437,8 +443,8 @@ public class MaterialShowcaseView extends FrameLayout implements View.OnTouchLis
     }
 
     void setPosition(int x, int y) {
-        mXPosition = x;
-        mYPosition = y;
+        mXPosition = x + shapeOffset.x;
+        mYPosition = y + shapeOffset.y;
     }
 
     private void setTitleText(CharSequence contentText) {
