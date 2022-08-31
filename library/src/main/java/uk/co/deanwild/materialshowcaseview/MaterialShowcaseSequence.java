@@ -53,19 +53,30 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     }
 
     public MaterialShowcaseSequence addSequenceItem(View targetView, String content, String dismissText) {
-        addSequenceItem(targetView, "", content, dismissText);
+        addSequenceItem(targetView, "", content, dismissText, false);
         return this;
     }
 
-    public MaterialShowcaseSequence addSequenceItem(View targetView, String title, String content, String dismissText) {
+    public MaterialShowcaseSequence addSequenceItemClickable(View targetView, String content, String dismissText) {
+        addSequenceItem(targetView, "", content, dismissText, true);
+        return this;
+    }
 
-        MaterialShowcaseView sequenceItem = new MaterialShowcaseView.Builder(mActivity)
-                .setTarget(targetView)
+    public MaterialShowcaseSequence addSequenceItem(View targetView, String title, String content, String dismissText, boolean clickable) {
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(mActivity);
+        builder.setTarget(targetView)
                 .setTitleText(title)
-                .setDismissText(dismissText)
                 .setContentText(content)
-                .setSequence(true)
-                .build();
+                .setSequence(true);
+
+        if (clickable) {
+            builder.setTargetTouchable(true);
+            builder.setDismissOnTargetTouch(true);
+        } else {
+            builder.setDismissText(dismissText);
+        }
+
+        MaterialShowcaseView sequenceItem = builder.build();
 
         if (mConfig != null) {
             sequenceItem.setConfig(mConfig);
@@ -76,20 +87,66 @@ public class MaterialShowcaseSequence implements IDetachedListener {
     }
 
     public MaterialShowcaseSequence addSequenceItemRectangle(View targetView, String content, String dismissText) {
-        addSequenceItemRectangle(targetView, "", content, dismissText);
+        addSequenceItemRectangle(targetView, "", content, dismissText, false);
         return this;
     }
 
-    public MaterialShowcaseSequence addSequenceItemRectangle(View targetView, String title, String content, String dismissText) {
+    public MaterialShowcaseSequence addSequenceItemRectangleClickable(View targetView, String content, String dismissText) {
+        addSequenceItemRectangle(targetView, "", content, dismissText, true);
+        return this;
+    }
 
-        MaterialShowcaseView sequenceItem = new MaterialShowcaseView.Builder(mActivity)
-                .setTarget(targetView)
+    public MaterialShowcaseSequence addSequenceItemRectangle(View targetView, String title, String content, String dismissText, boolean clickable) {
+        MaterialShowcaseView.Builder builder = new MaterialShowcaseView.Builder(mActivity);
+        builder.setTarget(targetView)
                 .setTitleText(title)
-                .setDismissText(dismissText)
                 .setContentText(content)
                 .withRectangleShape()
-                .setSequence(true)
-                .build();
+                .setSequence(true);
+
+        if (clickable) {
+            builder.setTargetTouchable(true);
+            builder.setDismissOnTargetTouch(true);
+        } else {
+            builder.setDismissText(dismissText);
+        }
+
+        MaterialShowcaseView sequenceItem = builder.build();
+
+        if (mConfig != null) {
+            sequenceItem.setConfig(mConfig);
+        }
+
+        mShowcaseQueue.add(sequenceItem);
+        return this;
+    }
+
+    public MaterialShowcaseSequence addSequenceItemCircle(View targetView, String content, String dismissText) {
+        addSequenceItemCircle(targetView, "", content, dismissText, false);
+        return this;
+    }
+
+    public MaterialShowcaseSequence addSequenceItemCircleClickable(View targetView, String content, String dismissText) {
+        addSequenceItemCircle(targetView, "", content, dismissText, true);
+        return this;
+    }
+
+    public MaterialShowcaseSequence addSequenceItemCircle(View targetView, String title, String content, String dismissText, boolean clickable) {
+        MaterialShowcaseView.Builder builder  = new MaterialShowcaseView.Builder(mActivity);
+        builder.setTarget(targetView)
+                .setTitleText(title)
+                .setContentText(content)
+                .withCircleShape()
+                .setSequence(true);
+
+        if (clickable) {
+            builder.setTargetTouchable(true);
+            builder.setDismissOnTargetTouch(true);
+        } else {
+            builder.setDismissText(dismissText);
+        }
+
+        MaterialShowcaseView sequenceItem = builder.build();
 
         if (mConfig != null) {
             sequenceItem.setConfig(mConfig);
